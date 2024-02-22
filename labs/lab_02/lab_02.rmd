@@ -107,5 +107,5 @@ maryland_expenses_with_spending_location |>
 maryland_expenses |>
   group_by(expense_category) |>
   summarize(total_amount= sum(amount), na.rm=T) |>
-  arrange(desc(sum()))
+  arrange(desc(total_amount))
 ```
