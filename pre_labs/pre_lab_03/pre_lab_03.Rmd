@@ -282,8 +282,9 @@ cleaned_md_grants_loans
 
 ```{r}
  cleaned_md_grants_loans|>
-  group_by(zip5, "MARYLAND TOURISM BOARD GRANT") |>
-  summarize(total_amount= sum(amount), na.rm=T) |>
+   filter(str_detect(source,"MARYLAND TOURISM BOARD"))
+  group_by(zip5) |>
+  summarize(total_amount= sum(amount) |>
   arrange(desc(total_amount))
 
   
