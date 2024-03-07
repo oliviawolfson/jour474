@@ -16,21 +16,23 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Introduction 
+## Introduction
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY URL)
+In this notebook, we are reverse engineering the story, [STORY NAME](STORY%20URL)
 
 ## Load libraries
 
 Loading required libraries for this analysis.
 
 ```{r echo=FALSE, message=FALSE}
-
+library(tidyverse)
+library(lubridate)
+library(janitor)
 ```
 
 ## Load and Cleaning Data
 
-In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data. 
+In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data.
 
 ```{r}
 # Load required data
@@ -39,28 +41,35 @@ In this section, describe the source of the data, write a basic data dictionary 
 
 # Clean required data and prepare for analysis if needed. 
 
-
+murder_data <- read_csv("data/homicide-data.csv")
+murder_data <- read_csv("data/homicide-data copy.csv")
 ```
 
 ## Sentences to Engineer
+
 In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: City police made an arrest in 41 percent of homicides in 2014
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+    -   When you filter for just Baltimore and 2014, the original number of murders is 211. Then when you filter for closed by arrest you get 86. 86/211= .407 which is roughly 41%.
 
 ```{r}
 # Put code to reverse engineer sentence here
-
+murder_data |>
+  filter(str_detect(reported_date, "2014")) |>
+  filter(str_detect(city, "Baltimore")) |>
+  filter (str_detect(disposition, "Closed by arrest"))
 # Display results of code below this codeblock
+
 
 ```
 
 ### Sentence 2
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: [Paste in sentence to engineer here]
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -71,8 +80,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 3
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: [Paste in sentence to engineer here]
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -83,8 +92,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 4
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: [Paste in sentence to engineer here]
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -95,8 +104,8 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 5
 
-* **Sentence text**: [Paste in sentence to engineer here]
-* **Analysis summary**: [Write up two to three sentences describing the results of your analysis.  Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: [Paste in sentence to engineer here]
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
 
 ```{r}
 # Put code to reverse engineer sentence here
