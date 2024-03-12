@@ -69,12 +69,13 @@ Q2. You want to understand if there's a pattern in the day of the week that over
 A2.
 
 ```{r}
-emergency_calls <- emergency_calls |>
-mutate(day_of_week = wday(date)) |>
-emergency_calls |>
-  group_by(day_of_week) |>
-  summarize(day_count = n()) |>
-  mutate(pct_total = (day_count/sum(day_count)*100))
+emergency_calls <- emergency_calls |> 
+  mutate(day_of_week = wday(date))
+  group_by(day_of_week) |> 
+  summarize(day_count = n()) |> 
+  mutate(pct_total = count/4112*100) |> 
+  arrange(desc(day_count)
+
 ```
 
 Q3. Now let's look at locations. Which ones have the most calls? How would you describe them (feel free to search for more information on them)? Is there anything about the structure of the original data that might make you less confident in the counts by location or date?
