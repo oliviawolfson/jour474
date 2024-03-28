@@ -53,14 +53,16 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 -   **Sentence text**: City police made an arrest in 41 percent of homicides in 2014
 -   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
-    -   When you filter for just Baltimore and 2014, the original number of murders is 211. Then when you filter for closed by arrest you get 86. 86/211= .407 which is roughly 41%.
+    -   When you filter for just Baltimore and 2014 and "Closed by arrest" you get for .407 which is roughly 41%.
 
 ```{r}
 # Put code to reverse engineer sentence here
 murder_data |>
   filter(str_detect(reported_date, "2014")) |>
   filter(str_detect(city, "Baltimore")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
+  summarise(
+    sum(str_detect(disposition, "Closed by arrest")) / n())
+
 # Display results of code below this codeblock
 
 
@@ -69,14 +71,16 @@ murder_data |>
 ### Sentence 2
 
 -   **Sentence text**: Of the 1,002 homicides between 2015 and the beginning of this year, just 252 — one out of every four — resulted in an arrest."
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Analysis summary**: We found the correct answer by looking at each year since 2015 to when the article was published, and then filtering which of these were closed by arrest which was 252. We also got 25% were closed by arrest, which is 1 out of 4.
 
 ```{r}
 # Put code to reverse engineer sentence here
 murder_data |>
  filter(str_detect(reported_date, "2015") | str_detect(reported_date, "2016") | str_detect(reported_date, "2017"))|>
   filter(str_detect(city, "Baltimore")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
+  summarise(
+    sum(str_detect(disposition, "Closed by arrest")) / n()  )
+
 # Display results of code below this codeblock
 
 ```
@@ -84,66 +88,74 @@ murder_data |>
 ### Sentence 3
 
 -   **Sentence text**: In Chicago, the homicide arrest rate has dropped 21 percentage points, in Boston it has dropped 12 points and in St. Louis it is down 9.
--   **Analysis summary**: 125/418= 29.9% , 68/654= 8.5% which gives Chicago a nearly 21% drop. 65/160= 40.6% , 64/202= 31.6% which gives St. Louis a 9% drop. 29/55= 52% , 22/54= 40% which gives Boston a 12% drop
+-   **Analysis summary**: Chicago is 29.9% closed in 2014 and 8.5% in 2017 which gives Chicago a nearly 21% drop. St. Louis is 40.6% closed in 2014 and 31.6% closed in 2017 which gives St. Louis a 9% drop. Boston is 52% closed in 2014 and 40% closed in 2017 which gives Boston a 12% drop
 
 ```{r}
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Chicago")) 
-#418
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Chicago")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
-#125
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Chicago")) 
-#654
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Chicago")) |>
-#68
+#St. Louis 
 murder_data |>
   filter(str_detect(reported_date, "2014")) |>
   filter(str_detect(city, "St. Louis")) 
-#160
+
 murder_data |>
   filter(str_detect(reported_date, "2014")) |>
   filter(str_detect(city, "St. Louis")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
-#65
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
 murder_data |>
   filter(str_detect(reported_date, "2017")) |>
   filter(str_detect(city, "St. Louis")) 
-#202
+
 murder_data |>
   filter(str_detect(reported_date, "2017")) |>
   filter(str_detect(city, "St. Louis")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
-#64
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
 
+#Boston 
 murder_data |>
   filter(str_detect(reported_date, "2014")) |>
   filter(str_detect(city, "Boston")) 
-#55
+
 murder_data |>
   filter(str_detect(reported_date, "2014")) |>
   filter(str_detect(city, "Boston")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
-#29
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
 murder_data |>
   filter(str_detect(reported_date, "2017")) |>
   filter(str_detect(city, "Boston")) 
-#54
+
 murder_data |>
   filter(str_detect(reported_date, "2017")) |>
   filter(str_detect(city, "Boston")) |>
-  filter (str_detect(disposition, "Closed by arrest"))
-#22
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
 
+#Chicago 
+murder_data |>
+  filter(str_detect(reported_date, "2014")) |>
+  filter(str_detect(city, "Chicago")) 
 
-# Display results of code below this codeblock
+murder_data |>
+  filter(str_detect(reported_date, "2014")) |>
+  filter(str_detect(city, "Chicago")) |>
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
+murder_data |>
+  filter(str_detect(reported_date, "2017")) |>
+  filter(str_detect(city, "Chicago")) 
+
+murder_data |>
+  filter(str_detect(reported_date, "2017")) |>
+  filter(str_detect(city, "Chicago")) |>
+    summarise(
+  sum(str_detect(disposition, "Closed by arrest")) / n()
+    )
 
 ```
 
@@ -158,37 +170,42 @@ murder_data |>
     2017- 27.3% 2016 2016- 22.5% 2015- 25.4%
 
 ```{r}
-# 2015 homicides 342
 murder_data |>
-  filter(str_detect(reported_date, "2015")) |>
-  filter(str_detect(city, "Baltimore")) 
+filter(str_detect(reported_date, "2015")) |>
+  filter(str_detect(city, "Baltimore"))
 
-# 2015 closed 87
 murder_data |>
   filter(str_detect(reported_date, "2015")) |>
   filter(str_detect(city, "Baltimore")) |>
-  filter(str_detect(disposition, "Closed by arrest"))
-
-#2016 homicides 320 
+  summarize(
+  sum(str_detect(disposition, "Closed by arrest")) / n())
+    
 murder_data |>
-  filter(str_detect(reported_date, "2016")) |>
-  filter(str_detect(city, "Baltimore")) 
+filter(str_detect(reported_date, "2016")) |>
+  filter(str_detect(city, "Baltimore"))
 
-#2016 closed 72
 murder_data |>
   filter(str_detect(reported_date, "2016")) |>
   filter(str_detect(city, "Baltimore")) |>
-  filter(str_detect(disposition, "Closed by arrest"))
+  summarize(
+  sum(str_detect(disposition, "Closed by arrest")) / n())
 
-#2017 homicides 340
+murder_data |>
+filter(str_detect(reported_date, "2017")) |>
+  filter(str_detect(city, "Baltimore"))
+
 murder_data |>
   filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Baltimore")) 
-#2017 closed 93
+  filter(str_detect(city, "Baltimore")) |>
+  summarize(
+  sum(str_detect(disposition, "Closed by arrest")) / n())
+
 murder_data |> 
   filter(str_detect(reported_date, "2017")) |>
   filter(str_detect(city, "Baltimore")) |>
   filter(str_detect(disposition, "Closed by arrest"))
+
+
 ```
 
 ### Sentence 5
