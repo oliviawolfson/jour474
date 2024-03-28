@@ -149,14 +149,46 @@ murder_data |>
 
 ### Sentence 4
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**:
+
+    Since 2015, the arrest rate hasn’t topped 30 percent in any year. (Baltimore)
+
+-   **Analysis summary**:
+
+    2017- 27.3% 2016 2016- 22.5% 2015- 25.4%
 
 ```{r}
-# Put code to reverse engineer sentence here
+# 2015 homicides 342
+murder_data |>
+  filter(str_detect(reported_date, "2015")) |>
+  filter(str_detect(city, "Baltimore")) 
 
-# Display results of code below this codeblock
+# 2015 closed 87
+murder_data |>
+  filter(str_detect(reported_date, "2015")) |>
+  filter(str_detect(city, "Baltimore")) |>
+  filter(str_detect(disposition, "Closed by arrest"))
 
+#2016 homicides 320 
+murder_data |>
+  filter(str_detect(reported_date, "2016")) |>
+  filter(str_detect(city, "Baltimore")) 
+
+#2016 closed 72
+murder_data |>
+  filter(str_detect(reported_date, "2016")) |>
+  filter(str_detect(city, "Baltimore")) |>
+  filter(str_detect(disposition, "Closed by arrest"))
+
+#2017 homicides 340
+murder_data |>
+  filter(str_detect(reported_date, "2017")) |>
+  filter(str_detect(city, "Baltimore")) 
+#2017 closed 93
+murder_data |> 
+  filter(str_detect(reported_date, "2017")) |>
+  filter(str_detect(city, "Baltimore")) |>
+  filter(str_detect(disposition, "Closed by arrest"))
 ```
 
 ### Sentence 5
