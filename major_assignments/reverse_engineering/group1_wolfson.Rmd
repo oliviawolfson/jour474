@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY%20URL)
+In this notebook, we are reverse engineering the story, "As police struggle to solve homicides, Baltimore residents see an ‘open season for killing," written by Wesley Lowery, Steven Rich, and Salwan Georges. Link: <https://www.washingtonpost.com/investigations/as-police-struggle-to-solve-homicides-baltimore-residents-see-an-open-season-for-killing/2018/12/26/7ee561e4-fb24-11e8-8c9a-860ce2a8148f_story.html>
 
 ## Load libraries
 
@@ -210,13 +210,16 @@ murder_data |>
 
 ### Sentence 5
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: In each of those neighborhoods, police make an arrest in fewer than 25 percent of cases, including 16 percent in Sandtown-Winchester."
+-   **Analysis summary**: In order to find the percentages in a certain town, first research was done about the exact coordinates of Sandtown-Winchester. Then we imputed these numbers into Str_detect and found how many of these were closed with an arrest. In order to find the zip code of Sandtown-Winchester, we did a google search on the longitude and latitude of the town. The issue with route, is that it's an approximation and theoretically could be wrong because it's not exact. (We were unsure if the range was fully accurate). In order to find specific longitude and latitude we would use “TidyGeocoder,” but we did not have the capacity to run this full code because it would take a great length of time.
 
 ```{r}
-# Put code to reverse engineer sentence here
+murder_data |>
+filter(str_detect(lat,'39.303')) |>
+filter(str_detect(lon,'-76.64')) |>
+  summarize(
+  sum(str_detect(disposition, "Closed by arrest")) / n())
 
-# Display results of code below this codeblock
 
 ```
 
