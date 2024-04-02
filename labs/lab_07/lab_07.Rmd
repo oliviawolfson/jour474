@@ -107,4 +107,7 @@ montgomery_zip_overdose <- montgomery_overdose_calls |>
 **A5**
 
 ```{r}
+ moco_pop_overdose <-moco_pop_overdose |>
+   mutate(max_pop <-(max(estimate))|>
+   arrange(desc(max_pop))
 ```
