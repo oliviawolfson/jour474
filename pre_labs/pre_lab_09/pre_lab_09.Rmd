@@ -88,7 +88,7 @@ knitr::include_graphics("images/datawrapper6.png")
 
 Some publication systems allow for the embedding of HTML into a post or a story. Some don't. The only way to know is to ask someone at your publication. Every publication system on the planet, though, can publish an image. So there's always a way to export your chart as a PNG file, which you can upload like any photo.
 
-**Answer** Copy the url of the graphic you published here. It will begin with <https://datawrapper.dwcdn.net/>. Don't copy the browser's current url.
+**Answer** Copy the url of the graphic you published here. It will begin with <https://datawrapper.dwcdn.net/>. Don't copy the browser's current url. <https://datawrapper.dwcdn.net/R7JhU/1/>
 
 ### Task 8: Make a Choropleth Map
 
@@ -105,11 +105,12 @@ In order to make a map, we need to be able to tell Datawrapper that a certain co
 **Task** Write code to add columns showing the total number of votes for each county and the percentage of votes received by Wes Moore in each county (you did this in Lab 9!), then replace the CSV file in the data folder with it.
 
 ```{r}
+md_gov_county_total_votes <- md_gov_county |>mutate(total_votes = cox + moore + lashar + wallace + harding, moore_pct= moore/(total_votes)*100)
+ 
+ 
 
-# calculate the total number of votes and Moore's percentage, saving it back to the md_gov_county dataframe
+write_csv(md_gov_county_total_votes, "data/md_gov_county_total_votes.csv")
 
-
-write_csv(md_gov_county, "data/md_gov_county.csv")
 ```
 
 **Task** Go back to Datawrapper and click on "New Map". Click on "Choropleth map" and then choose "USA \>\> Counties (2022)" for the map base and click the Proceed button.
@@ -134,6 +135,8 @@ You'll see that the map currently is of the whole nation, and we only have Maryl
 
 **Task** Look for "Hide regions without data" under Appearance, and click the slider icon to enable that feature. You should see a map zoomed into Maryland with some counties in various colors. **Answer** Describe the changes from the previous map
 
+The map is now zoomed in on Maryland
+
 But it's a little rough visually, so let's clean that up.
 
 **Task** Look for the "Show color legend" label and add a caption for the legend, which is the horizontal bar under the title. It represents the extent of the data from smallest percentage of votes to largest. Then click on the "Annotate" tab to add a title, description, data source and byline. The title should represent the headline, while the description should be a longer phrase that tells people what they are looking at.
@@ -146,4 +149,4 @@ That's better, but check out the tooltip by hovering over a county. It's not sup
 
 Ok, that looks better. Let's publish!
 
-**Task** Click the "Proceed" button until you get to the "Publish & Embed" tab, then click "Publish Now". Copy the published URL (like you did for the chart above) and paste it below. **Answer** Put the URL of your map here.
+**Task** Click the "Proceed" button until you get to the "Publish & Embed" tab, then click "Publish Now". Copy the published URL (like you did for the chart above) and paste it below. **Answer** Put the URL of your map here. <https://datawrapper.dwcdn.net/dE3OO/1/>
