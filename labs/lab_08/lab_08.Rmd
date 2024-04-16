@@ -29,6 +29,9 @@ library(tidycensus)
 You will need to create columns for the date, week and month based on the existing `datetime` column.
 
 ```{r}
+pg_calls <- read_csv("data/prince_georges_2022_overdoses.csv")
+
+pg_calls <- pg_calls |> mutate(date = date(datetime), month = month(datetime, label=TRUE), week = week(datetime))
 
 ```
 
@@ -42,13 +45,29 @@ You will need to create columns for the date, week and month based on the existi
 
 Compare the results here to those from the pre_lab_08 bar chart - are there major differences in the months with the highest and lowest figures? Describe that below.
 
-**A1.**
+**A1. Yes PG has more calls in December than Baltimore and Baltimore has more calls in August.**
 
 ```{r}
+pg_calls_month <- pg_calls |>
+  group_by(month) |> 
+  summarize(total_calls = n()) |> 
+  mutate(pct = total_calls/1397 *100) |> 
+  arrange(desc(pct))
 
 ```
 
 ```{r}
+pg_calls_month |>
+  ggplot() + 
+  geom_bar(aes(x=reorder(month,pct), weight=pct)) + 
+  coord_flip() +
+  labs(
+    title="One in Ten Prince George's Overdose 911 Calls Made in December",
+    y = "percentage of calls",
+    x = "month",
+    caption = "source: Prince George's County EMS"
+  )
+
 
 ```
 
@@ -60,13 +79,25 @@ Compare the results here to those from the pre_lab_08 bar chart - are there majo
 
 Describe the pattern of results; you may want to look at the data to dig into particular outliers.
 
-**A2.**
+**A2. There's a mid year spike in the data in the middle of the year then a drop at the end.**
 
 ```{r}
+pg_calls_week <- pg_calls |>
+  group_by(week) |> 
+  summarize(total_calls = n())
 
 ```
 
 ```{r}
+pg_calls_week |> 
+  ggplot() + 
+  geom_line(aes(x=week, y=total_calls)) + 
+  labs(
+    title="Prince George's County 911 Overdose Calls Show Mid-Year Spike",
+    y = "total calls",
+    x = "week",
+    caption = "source: Prince George's County EMS"
+  )
 
 ```
 
@@ -96,14 +127,14 @@ To answer this question, do the following:
 6.  Add a label for each point that shows the zip code using geom_text() - see some examples of its use at <https://ggplot2.tidyverse.org/reference/geom_text.html#ref-examples>. Try to make the names as easy to read as possible by avoiding overlap.
 7.  In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
 
-**A3.**
+**A3. There is a slight correlation between having a lower median income in an area and a higher number of overdose calls. I would then look into the resources each of these areas has to deal with drug problems.**
 
 ```{r}
-#pg_calls_zipcodes <- pg_calls |> groupby(zipcode) |> summarize(total_calls= n())
+pg_calls_zipcodes <- pg_calls |> group_by(zipcode) |> summarize(total_calls= n())
 
-# md_median_income_zip <- get_acs(geography= 'zcta', variables= 'B19013_001', state= 'MD', year = 2019 )
-#pg_calls_with_income <- pg_calls_zipcodes |> inner_join (md_median_income_zip, by = c('zipcode'='GEOID'))
-# pg_calls_with_income |> 
-# ggplot() + geom_point(aes(x=estimate, y=total_calls)) 
+ md_median_income_zip <- get_acs(geography= 'zcta', variables= 'B19013_001', state= 'MD', year = 2019 )
+pg_calls_with_income <- pg_calls_zipcodes |> inner_join (md_median_income_zip, by = c('zipcode'='GEOID'))
+ pg_calls_with_income |> 
+ ggplot() + geom_point(aes(x=estimate, y=total_calls)) 
 
 ```

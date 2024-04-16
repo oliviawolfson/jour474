@@ -51,7 +51,9 @@ readable labels and values \* Publish your chart \* Describe your
 thought process below - why you chose to make the chart you did - and
 add the URL of your chart.
 
-**A1.**
+**A1.** <https://datawrapper.dwcdn.net/VLt89/1/> I did two horizontal
+bars next to eachother because I thought it was the best to visually
+understand how much Hogan outperformed Cox
 
 ```{r}
 md_gov_county <- read_csv("data/md_gov_county.csv") |> clean_names()
@@ -62,8 +64,7 @@ clean_names(md_gov_county_18)
 all_county_votes <- md_gov_county |> inner_join(md_gov_county_18, by=c('geoid', 'county'))
 
 all_county_votes <- all_county_votes |> mutate(
-  pct_cox = cox(cox + moore + lashar + wallace + harding + sefcik + write_ins.x), 
-  pct_hogan = hogan(hogan + jealous + quinn + shlakman + write_ins.y)
+  total_votes_22= cox + moore + lashar + wallace + harding + sefcik + write_ins.x, cox_pct= cox/(total_votes_22)*100, total_votes_18 = hogan + jealous + quinn + schlakman + write_ins.y, hogan_pct = hogan/(total_votes_18)*100
 )
 write_csv(all_county_votes, 'data/all_county_votes.csv')
 ```
@@ -84,9 +85,16 @@ column to get the option of "hiding" it in any visualization.
 What do you think the story here is? Put the answer below along with the
 URL of your chart.
 
+<https://datawrapper.dwcdn.net/al5v3/1/> The story is how dramatic the
+methods changed in 2020 which is likely due to the pandemic
+
 **A2.**
 
 ```{r}
+md_votes_by_type <- read_csv("data/md_votes_by_type.csv") |> clean_names()
+md_votes_by_type <- md_votes_by_type |> mutate( pct_mail= mail/(total)*100, pct_election_day= election_day/(total)*100, pct_early= early/(total)*100)
+
+write_csv(md_votes_by_type, 'data/md_votes_by_type.csv')
 ```
 
 **Q3.** You want to know more about the geography of 911 overdose calls
@@ -114,4 +122,12 @@ more about? Put the answer below along with the URL of your map.
 **A3.**
 
 ```{r}
+montgomery_2022_overdoses <- read_csv("data/montgomery_2022_overdoses.csv") |> clean_names()
+montgomery_2022_overdoses <- montgomery_2022_overdoses |>  
+  group_by(zip)|>
+  summarise(count_zip = n())|>
+mutate(
+  total_calls= sum(count_zip), pct_total_calls= count_zip/(total_calls)*100
+)
+write_csv(montgomery_2022_overdoses, 'data/montgomery_2022_overdoses.csv')
 ```
