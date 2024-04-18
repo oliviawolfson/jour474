@@ -126,8 +126,7 @@ montgomery_2022_overdoses <- read_csv("data/montgomery_2022_overdoses.csv") |> c
 montgomery_2022_overdoses <- montgomery_2022_overdoses |>  
   group_by(zip)|>
   summarise(count_zip = n())|>
-mutate(
-  total_calls= sum(count_zip), pct_total_calls= count_zip/(total_calls)*100
-)
+mutate((zip_pct=count_zip/sum(count))*100)
+
 write_csv(montgomery_2022_overdoses, 'data/montgomery_2022_overdoses.csv')
 ```
