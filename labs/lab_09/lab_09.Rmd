@@ -119,7 +119,7 @@ choropleth map in Datawrapper. You will need to:
 What do you think the story here is, and what would you want to know
 more about? Put the answer below along with the URL of your map.
 
-**A3.**
+**A3.** <https://datawrapper.dwcdn.net/pxoEE/1/>
 
 ```{r}
 montgomery_2022_overdoses <- read_csv("data/montgomery_2022_overdoses.csv") |> clean_names()
