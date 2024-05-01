@@ -40,9 +40,17 @@ In this section, describe the source of the data, write a basic data dictionary 
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 
 # Clean required data and prepare for analysis if needed. 
+wbb_2022 <- read_csv("data/wbb_rosters_2022_23.csv") |> clean_names() 
 
-murder_data <- read_csv("data/homicide-data.csv")
-murder_data <- read_csv("data/homicide-data copy.csv")
+wbb_2023 <-read_csv("data/wbb_rosters_2023_24.csv")|> clean_names() 
+
+wbb_2021 <-read_csv("data/wbb_rosters_2021_22.csv")|> clean_names()
+
+wbb_2020 <- read_csv("data/wbb_rosters_2020_21.csv")|> clean_names()
+
+wbb_crosswalk <- read_csv("data/wbb_rosters23_crosswalk.csv") |> clean_names()
+
+
 ```
 
 ## Sentences to Engineer
@@ -51,27 +59,18 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
--   **Sentence text**: City police made an arrest in 41 percent of homicides in 2014
+-   **Sentence text**:
 -   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
-    -   When you filter for just Baltimore and 2014 and "Closed by arrest" you get for .407 which is roughly 41%.
-
-```{r}
-# Put code to reverse engineer sentence here
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Baltimore")) |>
-  summarise(
-    sum(str_detect(disposition, "Closed by arrest")) / n())
-
-# Display results of code below this codeblock
+    -   {r}
+        # Put code to reverse engineer sentence here
 
 
-```
+        # Display results of code below this codeblock
 
 ### Sentence 2
 
--   **Sentence text**: Of the 1,002 homicides between 2015 and the beginning of this year, just 252 — one out of every four — resulted in an arrest."
--   **Analysis summary**: We found the correct answer by looking at each year since 2015 to when the article was published, and then filtering which of these were closed by arrest which was 252. We also got 25% were closed by arrest, which is 1 out of 4.
+-   **Sentence text**:
+-   **Analysis summary**:
 
 ```{r}
 # Put code to reverse engineer sentence here
