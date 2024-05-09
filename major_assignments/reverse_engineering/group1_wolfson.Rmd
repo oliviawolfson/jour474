@@ -55,169 +55,109 @@ wbb_crosswalk <- read_csv("data/wbb_rosters23_crosswalk.csv") |> clean_names()
 
 ## Sentences to Engineer
 
-In this notebook, we are reverse engineering five sentences from the story.
-
 ### Sentence 1
 
--   **Sentence text**:
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
-    -   {r}
-        # Put code to reverse engineer sentence here
+-   **Sentence text**: What is the average height of players of each year
+-   **Analysis summary**: 2020 has the highest average with 81 inches. Each year had a group of cities tied for the tallest average. A problem we had was we couldn't load 2021 because there was no total inches column. In 2020, the tallest height 6.75 feet and in 2022 and 2023 the tallest height was 6.583 ft.
+
+```{r}
+wbb_2020_height_per_town <- wbb_2020 |>
+  group_by(hometown_clean) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
 
 
-        # Display results of code below this codeblock
+wbb_2022_height_per_town <- wbb_2022 |>
+   group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
+
+wbb_2023_height_per_town <- wbb_2023 |>
+  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
+
+
+```
 
 ### Sentence 2
 
--   **Sentence text**:
--   **Analysis summary**:
+-   **Sentence text**: How many people play in each position from 2020-2023
+-   **Analysis summary**: The guard was the highest position for all 4 year with 7,670 in 2020, with 8,109 in 2021, with 8,305 in 2022 and with 8,282 in 2023.
 
 ```{r}
-# Put code to reverse engineer sentence here
-murder_data |>
- filter(str_detect(reported_date, "2015") | str_detect(reported_date, "2016") | str_detect(reported_date, "2017"))|>
-  filter(str_detect(city, "Baltimore")) |>
-  summarise(
-    sum(str_detect(disposition, "Closed by arrest")) / n()  )
+wbb_positions_2020 <- wbb_2020 |>
+  group_by(position_clean) |>
+  summarize(count = n())
 
-# Display results of code below this codeblock
+wbb_positions_2021 <- wbb_2021 |>
+  group_by(position_clean) |>
+  summarize(count = n())
+
+wbb_positions_2022 <- wbb_2022 |>
+  group_by(position_clean) |>
+  summarize(count = n())
+
+wbb_positions_2023 <- wbb_2023 |>
+  group_by(position_clean) |>
+  summarize(count = n())
 
 ```
 
 ### Sentence 3
 
--   **Sentence text**: In Chicago, the homicide arrest rate has dropped 21 percentage points, in Boston it has dropped 12 points and in St. Louis it is down 9.
--   **Analysis summary**: Chicago is 29.9% closed in 2014 and 8.5% in 2017 which gives Chicago a nearly 21% drop. St. Louis is 40.6% closed in 2014 and 31.6% closed in 2017 which gives St. Louis a 9% drop. Boston is 52% closed in 2014 and 40% closed in 2017 which gives Boston a 12% drop
+-   **Sentence text**: In the years 2022 and 2023, how many teams had more than 1 redshirt on their team? What team had the most, and where are they from
+-   **Analysis summary**: In 2022 Grand Valley State in Michigan had the most red shirts with 12 and in 2023 Biola in California had the most red shirts 10.
 
 ```{r}
-#St. Louis 
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "St. Louis")) 
+redshirt_22 <-wbb_2022 |>
+  group_by(team, team_state) |>
+  summarise(redshirt_numbers = sum(redshirt)) |> arrange(desc (redshirt_numbers)) |>
+  filter(redshirt_numbers > 1)
 
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "St. Louis")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "St. Louis")) 
+redshirt_23 <- wbb_2023 |>
+  group_by(team, team_state) |>
+  summarise(redshirt_count = sum(redshirt)) |> arrange(desc (redshirt_count)) |>
+  filter(redshirt_count > 1)
 
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "St. Louis")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
 
-#Boston 
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Boston")) 
-
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Boston")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Boston")) 
-
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Boston")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
-
-#Chicago 
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Chicago")) 
-
-murder_data |>
-  filter(str_detect(reported_date, "2014")) |>
-  filter(str_detect(city, "Chicago")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Chicago")) 
-
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Chicago")) |>
-    summarise(
-  sum(str_detect(disposition, "Closed by arrest")) / n()
-    )
 
 ```
 
 ### Sentence 4
 
--   **Sentence text**:
-
-    Since 2015, the arrest rate hasn’t topped 30 percent in any year. (Baltimore)
+-   **Sentence text**: What state producers the most WNBA players
 
 -   **Analysis summary**:
 
-    2017- 27.3% 2016 2016- 22.5% 2015- 25.4%
-
 ```{r}
-murder_data |>
-filter(str_detect(reported_date, "2015")) |>
-  filter(str_detect(city, "Baltimore"))
+wbb_states_2020 <- wbb_2020 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 
-murder_data |>
-  filter(str_detect(reported_date, "2015")) |>
-  filter(str_detect(city, "Baltimore")) |>
-  summarize(
-  sum(str_detect(disposition, "Closed by arrest")) / n())
-    
-murder_data |>
-filter(str_detect(reported_date, "2016")) |>
-  filter(str_detect(city, "Baltimore"))
+wbb_states_2021 <- wbb_2021 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 
-murder_data |>
-  filter(str_detect(reported_date, "2016")) |>
-  filter(str_detect(city, "Baltimore")) |>
-  summarize(
-  sum(str_detect(disposition, "Closed by arrest")) / n())
+wbb_states_2022 <- wbb_2022 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 
-murder_data |>
-filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Baltimore"))
-
-murder_data |>
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Baltimore")) |>
-  summarize(
-  sum(str_detect(disposition, "Closed by arrest")) / n())
-
-murder_data |> 
-  filter(str_detect(reported_date, "2017")) |>
-  filter(str_detect(city, "Baltimore")) |>
-  filter(str_detect(disposition, "Closed by arrest"))
+wbb_states_2023 <- wbb_2023 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 
 
 ```
 
 ### Sentence 5
 
--   **Sentence text**: In each of those neighborhoods, police make an arrest in fewer than 25 percent of cases, including 16 percent in Sandtown-Winchester."
--   **Analysis summary**: In order to find the percentages in a certain town, first research was done about the exact coordinates of Sandtown-Winchester. Then we imputed these numbers into Str_detect and found how many of these were closed with an arrest. In order to find the zip code of Sandtown-Winchester, we did a google search on the longitude and latitude of the town. The issue with route, is that it's an approximation and theoretically could be wrong because it's not exact. (We were unsure if the range was fully accurate). In order to find specific longitude and latitude we would use “TidyGeocoder,” but we did not have the capacity to run this full code because it would take a great length of time.
+-   **Sentence text**:
+
+-   Analysis:
 
 ```{r}
-murder_data |>
-filter(str_detect(lat,'39.303')) |>
-filter(str_detect(lon,'-76.64')) |>
-  summarize(
-  sum(str_detect(disposition, "Closed by arrest")) / n())
 
 
 ```
