@@ -59,13 +59,12 @@ pg_calls_month <- pg_calls |>
 ```{r}
 pg_calls_month |>
   ggplot() + 
-  geom_bar(aes(x=reorder(month,pct), weight=pct)) + 
+  geom_bar(aes(x=reorder(Namelsad,pct), weight=pct)) + 
   coord_flip() +
   labs(
-    title="One in Ten Prince George's Overdose 911 Calls Made in December",
-    y = "percentage of calls",
-    x = "month",
-    caption = "source: Prince George's County EMS"
+    title="Maryland Counties with the most overdue childcare facility inspections",
+    y = "# of overdue facilities",
+    x = "county",
   )
 
 

@@ -80,7 +80,7 @@ maryland_demographics <- read_csv('data/maryland_demographics.csv')
 **Task** Join the demographic data to the our combined voting/population data. To do this, we need to specify the join columns since the names aren't the same in the two dataframes.
 
 ```{r}
-maryland_population_with_voters_and_demographics <- maryland_population_with_voters |> left_join(maryland_demographics, join_by(COUNTY == NAME))
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters |> left_join(maryland_demographics, join_by(geoid == fips))
 ```
 
 ### Task 8: Asking Demographic Questions
